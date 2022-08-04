@@ -45,3 +45,28 @@ class TestBaseModel(unittest.TestCase):
         inst = BaseModel()
         dict_base = instance.to_dict()
         self.assertEqual(dict_base["__class__"], "BaseModel")
+        self.assertEqual(type(dict_base["created_at"]), str)
+        self.assertEqual(type(dict_base["updated_at"]), str)
+        self.assertEqual(
+                dict_base["created_at"], inst.updated_at.strftime(ti)
+        )
+        self.assertEqual(
+                dict_base["updated_at"], inst.updated_at.strftime(ti)
+        )
+
+    def test_to_dict(self):
+        """ test to dict method """
+        inst = BaseModel()
+        inst.name = "kal"
+        dict_inst = inst.to_dict()
+        attr = [
+                "id",
+                "created_at",
+                "updated_at",
+                "name",
+                "__class__"
+        ]
+        self.assertCountEqual(dict_inst.keys(), attr)
+        self.assertEqual(dict_inst['__class__'], 'BaseModel')
+        self.assertEqual(dict_inst['name'], "kal")
+
