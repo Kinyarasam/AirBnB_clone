@@ -76,7 +76,8 @@ class HBNBCommand(cmd.Cmd):
         action_map = {
                 "all": self.do_all,
                 "show": self.do_show,
-                "create": self.do_create
+                "create": self.do_create,
+                "destroy": self.do_destroy
         }
 
         match = re.search(r"\.", arg)
@@ -93,7 +94,8 @@ class HBNBCommand(cmd.Cmd):
         return False
 
     def do_all(self, argv):
-        """Prints all string representation of all instances """
+        """Prints all string representation of all instances
+        """
         arg_list = split(argv)
         objects = self.storage.all().values()
         if not arg_list:
@@ -105,9 +107,7 @@ class HBNBCommand(cmd.Cmd):
                 print([str(obj) for obj in objects if arg_list[0] in str(obj)])
 
     def do_create(self, argv):
-        """Creates a new instance of BaseModel
-        saves it (to a JSON file) and
-        prints the id
+        """Creates a new instance of BaseModel saves it (to a JSON file) and prints the id
         """
         args = check_args(argv)
         if args:
@@ -115,19 +115,34 @@ class HBNBCommand(cmd.Cmd):
             self.storage.save()
 
     def do_show(self, argv):
-        """Prints the string representation of an nstance based
-        on the class name and id
+        """Prints the string representation of an instance based on the class name and id
         """
         args = check_args(argv)
         if args:
             if len(args) != 2:
                 print("** instance id missing **")
             else:
-                key = "{} {}".format(args[0], args[1])
+                key = "{}.{}".format(args[0], args[1])
                 if key not in self.storage.all():
                     print("** no instance found **")
                 else:
                     print(self.storage.all()[key])
+
+    def do_destroy(self, argv):
+        """Deletes a class instance based on the name and given id.
+        """
+        arg_list = check_args(argv)
+
+        if arg_list:
+            if len(arg_list) == 1:
+                print("** instance id missing **")
+            else:
+                key = "{}.{}".format(*arg_list)
+                if key in self.storage.all():
+                    del self.storage.all()[key]
+                    self.storage.save()
+                else:
+                    print("** no instance found **")
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
