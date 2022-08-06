@@ -264,7 +264,9 @@
     },
     "User.f19ee936-17f7-46be-9c28-9511f0d7d3de": {
         "__class__": "User",
+        "age": "89",
         "created_at": "2022-08-06T13:28:06.057575",
+        "first_name": "John",
         "id": "f19ee936-17f7-46be-9c28-9511f0d7d3de",
         "updated_at": "2022-08-06T13:28:06.057575"
     },

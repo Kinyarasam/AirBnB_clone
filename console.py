@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from models.place import Place
 
 
 # A global constant since both functions within and outside uses it.
@@ -69,11 +70,13 @@ class HBNBCommand(cmd.Cmd):
     storage = models.storage
 
     def emptyline(self):
-        """execute when an empty line + <ENTER> key """
+        """execute when an empty line + <ENTER> key
+        """
         pass
 
     def do_EOF(self, argv):
-        """ EOF signal to exit the program """
+        """EOF signal to exit the program
+        """
         print("")
         return True
 
@@ -83,13 +86,15 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def default(self, arg):
-        """default behaviour for the cmd module when input is invalid"""
+        """default behaviour for the cmd module when input is invalid
+        """
         action_map = {
                 "all": self.do_all,
                 "show": self.do_show,
-                "create": self.do_create,
                 "destroy": self.do_destroy,
-                "update": self.do_update
+                "count": self.do_count,
+                "update": self.do_update,
+                "create": self.do_create
         }
 
         match = re.search(r"\.", arg)
@@ -186,6 +191,16 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
 
             self.storage.save()
+
+    def do_count(self, arg):
+        """Retrieve the number of instances of a class
+        """
+        arg1 = parse(arg)
+        count = 0
+        for obj in models.storage.all().values():
+            if arg1[0] == type(obj).__name__:
+                count += 1
+        print(count)
 
 
 if __name__ == "__main__":
