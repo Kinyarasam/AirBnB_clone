@@ -5,11 +5,13 @@ import re
 from shlex import split
 import models
 from models.base_model import BaseModel
+from models.user import User
 
 
 # A global constant since both functions within and outside uses it.
 CLASSES = [
-        "BaseModel"
+        "BaseModel",
+        "User"
 ]
 
 
@@ -167,7 +169,7 @@ class HBNBCommand(cmd.Cmd):
                     else:
                         obj = self.storage.all()[instance_id]
                         if arg_list[2] in type(obj).__dict__:
-                            v_type = type(obj.__dict__[arglist[2]])
+                            v_type = type(obj.__dict__[arg_list[2]])
                             setattr(obj, arg_list[2], v_type(arg_list[3]))
                         else:
                             setattr(obj, arg_list[2], arg_list[3])
