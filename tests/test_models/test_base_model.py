@@ -5,6 +5,7 @@ from models import BaseModel
 from datetime import datetime
 import models
 import time
+from unittest import mock
 import unittest
 
 
@@ -70,3 +71,20 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(dict_inst['__class__'], 'BaseModel')
         self.assertEqual(dict_inst['name'], "kal")
 
+        @mock.patch("models.storage")
+        def test_save(self, mock_storage):
+            """Test save and update
+            """
+            instance = BaseModel()
+            old_value_created = instance.created_at
+            old_value_update = instance.update_at
+            instance.save()
+            new_value_created = instance.created_at
+            new_value_updated = instance.updated_at
+            self.assertNotEqual(old_value_update, new_value_updated)
+            self.assertEqual(old_value_created, new_value_created)
+            self.assertTrue(mock_storage.save.called)
+
+
+if __name__ == "__main__":
+    unittest.main()
