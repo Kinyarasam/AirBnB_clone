@@ -26,7 +26,8 @@ class TestUser(unittest.TestCase):
         """testing the class attrs
         """
         u = User()
-        self.assertTrue(hasattr(User, "first_name")) and hasattr(User, "last_name")
+        self.assertTrue(hasattr(User, "first_name"))
+        and hasattr(User, "last_name")
 
     def test_class_attrs(self):
         u = User()
@@ -40,6 +41,7 @@ class TestUser(unittest.TestCase):
         """
         u = User()
         self.assertTrue(issubclass(type(u), BaseModel))
+
 
 if __name__ == "__main__":
     unittest.main()
