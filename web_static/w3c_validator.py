@@ -1,28 +1,19 @@
 #!/usr/bin/python3
 """
 W3C validator for Holberton School
-
-For HTML and css files.
-
+For HTML and CSS files.
 Based on 1 API:
 - https://validator.w3.org/docs/api.html
-
 Usage:
-
 Simple file:
-
 ```
 ./w3c_validator.py index.html
 ```
-
 Multiple files:
-
 ```
 ./w3c_validator.py index.html header.html styles/common.css
 ```
-
 All errors are printed in `STDERR`
-
 Return:
 Exit status is the # of errors, 0 on Success
 """
@@ -38,7 +29,7 @@ def __print_stdout(msg):
 
 
 def __print_stderr(msg):
-    """Prints message in STDERR
+    """Print message in STDERR
     """
     sys.stderr.buffer.write(msg.encode('utf-8'))
 
@@ -81,13 +72,13 @@ def __analyse(file_path):
     try:
         result = None
 
-        if file_path.endswitch(".css"):
+        if file_path.endswith(".css"):
             __is_empty(file_path)
             result = __validate(file_path, "text/css")
-        elif file_path.endswitch((".html", ".htm")):
+        elif file_path.endswith((".html", ".htm")):
             __is_empty(file_path)
             result = __validate(file_path, "text/html")
-        elif file_path.endswitch(".svg"):
+        elif file_path.endswith(".svg"):
             __is_empty(file_path)
             result = __validate(file_path, "image/svg+xml")
         else:
@@ -97,9 +88,35 @@ def __analyse(file_path):
                 "allowed.".format(file_path, allowed_files)
             )
 
-            if len(result) > 0:
-                for msg in result:
-                    __print_stderr("{}\n".format(msg))
-                    nb_errors += 1
-                else:
-                    __print_stdout("'{}' => OK\n")
+        if len(result) > 0:
+            for msg in result:
+                __print_stderr("{}\n".format(msg))
+                nb_errors += 1
+        else:
+            __print_stdout("'{}' => OK\n".format(file_path))
+
+    except Exception as e:
+        __print_stderr("'{}' => {}\n".format(e.__class__.__name__, e))
+    return nb_errors
+
+
+def __files_loop():
+    """Loop that analyses for each file from input arguments
+    """
+    nb_errors = 0
+    for file_path in sys.argv[1:]:
+        nb_errors += __analyse(file_path)
+
+    return nb_errors
+
+
+if __name__ == "__main__":
+    """Main
+    """
+    if len(sys.argv) < 2:
+        __print_stderr("usage: w3c_validator.py file1 file2 ...\n")
+        exit(1)
+
+    """execute tests, then exit. Exit status = # of errors (0 on success)
+    """
+    sys.exit(__files_loop())
